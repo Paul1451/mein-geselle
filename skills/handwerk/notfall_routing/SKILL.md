@@ -1,7 +1,7 @@
 ---
 name: notfall-routing
 description: "Emergency triage SOP for Handwerker incidents."
-version: 0.1.1
+version: 0.1.2
 author: paul
 license: MIT
 platforms: [linux, macos, windows]
@@ -106,3 +106,4 @@ minutes of the inbound message timestamp.**
 ## 📒 Learned Rules
 
 - 2026-05-28T14:14 [global] (emergency): Notfälle (Wasserschaden, Strom aus) sofort an Maler Schulz mobil eskalieren.  _(src: Bei akutem Wasserschaden direkt anrufen, nicht warten.)_
+- 2026-05-28T14:30 [global] (emergency): Bei Wasserschäden immer zuerst den Notdienst-Klempner Frank Becker anrufen.  _(src: Ab jetzt: bei Wasserschäden immer zuerst den Notdienst-Klempner Frank Becker anrufen.)_
