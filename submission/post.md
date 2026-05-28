@@ -1,5 +1,8 @@
 *This is a submission for the [Hermes Agent Challenge](https://dev.to/challenges/hermes-agent-2026-05-15), Build With Hermes Agent.*
 
+<!-- Cover image to upload in the dev.to editor: submission/diagrams/dev_to_cover.png (1200×630) -->
+
+
 > Scope notes: the demo quote is 8 qm bath wall area at ~4500 EUR net (before 19% MwSt). WeasyPrint PDF rendering has a known macOS Pango arm64/Rosetta issue documented in the README (markdown drafts always work; PDF works on aarch64 Python). The WhatsApp adapter was scoped out — Telegram covers everything in this demo.
 
 ## The Problem Every Tradesperson Knows
