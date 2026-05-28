@@ -1,1 +1,21 @@
 Warning: Unknown toolsets: mein_geselle
+
+session_id: 20260528_143043_ff72a5
+
+-----
+
+WeasyPrint could not import some external libraries. Please carefully follow the installation steps before reporting an issue:
+https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#installation
+https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#troubleshooting 
+
+-----
+
+Erledigt. Hier die Zusammenfassung:
+
+  Termin: Freitag, 29. Mai 2026, 14:00–16:00
+  Kundin: Frau Kowalski (ID 4)
+  Was:   Wohnzimmer streichen, 25 qm
+  Wo:    Boxhagener Straße 56, 10245 Berlin
+  Hinweis: Nur emissionsarme Farben – Allergie gegen Lösungsmittel
+
+UID: 077da64f-7e82-4c0d-8091-661e61d0cbb9@mein-geselle

@@ -53,6 +53,15 @@ gateway.run:             response ready: time=17.5s api_calls=3 response=453 cha
 
 **Tool ecosystem.** Five custom tools sit alongside Hermes' 60+ built-ins, registered via `registry.register()` in `tools/` under the toolset `mein_geselle`: `customer_db`, `calendar`, `lead_classify`, `angebot_draft`, and `remember_rule`. Average tool latency is 0.14 s.
 
+**Real multi-tool chain in 4 turns** — Schulz types `"Notfall! Familie Yıldırım hat Wasserschaden in der Küche. Was machen wir?"`. Hermes plans:
+
+1. `lead_classify` → urgency 5/5, category `notfall`
+2. `customer_db` → Yıldırım, Sonnenallee 211, `+49 30 6217 9043`, notes incl. `Kinder im Haus · Türkisch wäre nett`
+3. `calendar` → books an emergency slot 08:00–09:30 today, returns UID `275b6227-…`
+4. response → an ops checklist (Hauptabsperrung, Trocknungsgeräte, Versicherungsfotos) and a question: "Anrufen oder SMS?"
+
+The personal notes for the customer came from a previous session — surfaced by Hermes' FTS5 memory, not by anything I wrote.
+
 **The learning loop — the part I'm proudest of.** When Schulz says "Bei Frau Müller immer 5% Skonto", Hermes' built-in `skill_manage` *could* edit the relevant skill — but lighter planners don't always reach for it on a casual correction. So I wrote `remember_rule`, a thin opinionated wrapper that turns natural-language corrections into versioned skill edits with a git commit. Now even DeepSeek triggers the loop on phrases like "merk dir das". Each call bumps the skill's semver, appends a dated bullet to a `## 📒 Learned Rules` section, and commits to git — so the evolution is versioned AND visible on the dashboard timeline.
 
 Verbatim agent reply from a demo run (Maler's view):
