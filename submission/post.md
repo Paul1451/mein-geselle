@@ -86,13 +86,15 @@ That last line came from a conversation three days earlier. Hermes' FTS5 session
 
 ## Demo
 
-- `screenshot_1_telegram_lookup.png` — Paul asks about Frau Müller in Telegram; Hermes returns her details and last job.
-- `screenshot_2_telegram_skonto.png` — Paul says "5% Skonto for Frau Müller"; Hermes acks and bumps the skill.
-- `screenshot_3_dashboard_overview.png` — full Workshop Console with skill cards and recent calls.
-- `screenshot_4_skill_diff.png` — clicked-into diff showing the rule appended under Learned Rules.
-- `screenshot_5_skill_timeline.png` — the timeline strip after a week of evolution.
+![Workshop Console after the 8-turn demo](submission/screenshots/dashboard_final.png)
 
-Video walkthrough: [unlisted YouTube link — paste once recorded]
+The Workshop Console after one short demo session. All three skills show *Currently Evolving* badges. Skill LOC went from 82 → 271 (+230%) in the SVG growth chart on the right. The live feed pulls real assistant + user messages out of Hermes' FTS5 session store. Counters: 10 customers, 24 appointments, 17 quotes, 26 tool-calls today.
+
+![Skill card detail with the rule diff](submission/screenshots/skill_diff_expanded.png)
+
+Click a commit dot on a skill card → an HTMX-loaded unified diff slides out. The bullet under `## 📒 Learned Rules` is exactly what `remember_rule` appended after the Maler said "Bei Frau Müller immer 5% Skonto".
+
+Video walkthrough: [unlisted YouTube link — paste once recorded; see `submission/storyboard.md` for the 6-scene plan]
 
 ## Open-Source Repo
 
