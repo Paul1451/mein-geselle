@@ -1,7 +1,7 @@
 ---
 name: customer-intake
 description: "Classify inbound Handwerker messages and route them."
-version: 0.1.0
+version: 0.1.1
 author: paul
 license: MIT
 platforms: [linux, macos, windows]
@@ -93,3 +93,7 @@ routes; reply drafting lives in other skills (`angebot_style`,
   Herr Schulz, mein Rohr ist gebrochen" is still `notfall`).
 - Version 0.1.0 — labels and routing table are expected to evolve as
   Maler Schulz reviews mis-classifications.
+
+## 📒 Learned Rules
+
+- 2026-05-28T14:14 [global] (scheduling): Termine nie vor 08:30 Uhr vereinbaren — Schulz fährt vorher Material.
