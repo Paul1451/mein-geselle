@@ -1,7 +1,7 @@
 ---
 name: customer-intake
 description: "Classify inbound Handwerker messages and route them."
-version: 0.1.1
+version: 0.1.2
 author: paul
 license: MIT
 platforms: [linux, macos, windows]
@@ -97,3 +97,4 @@ routes; reply drafting lives in other skills (`angebot_style`,
 ## 📒 Learned Rules
 
 - 2026-05-28T14:14 [global] (scheduling): Termine nie vor 08:30 Uhr vereinbaren — Schulz fährt vorher Material.
+- 2026-05-28T14:31 [global] (scheduling): Keine Termine vor 8:30 Uhr. Paul fährt dann gerade zur Baustelle.  _(src: Termine vor 8:30 will ich nie wieder, ich fahre dann gerade zur Baustelle.)_
