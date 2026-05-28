@@ -1,7 +1,7 @@
 ---
 name: angebot-style
 description: "Style rules for German Handwerker quotes (Angebote)."
-version: 0.1.0
+version: 0.1.1
 author: paul
 license: MIT
 platforms: [linux, macos, windows]
@@ -93,3 +93,7 @@ concrete rule once we have real-world feedback from Maler Schulz.
   (or human approval step) handles delivery.
 - Version 0.1.0 — the slots above are tracked so we can diff style
   evolution between versions.
+
+## 📒 Learned Rules
+
+- 2026-05-28T14:14 [customer:Müller] (quoting): Always offer 5% Skonto for immediate payment.  _(src: Frau Müller zahlt gern sofort — merk dir das.)_
