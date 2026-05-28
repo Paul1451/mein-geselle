@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mein Geselle · Workshop Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://unpkg.com/htmx.org@1.9.12" defer></script>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-left">
+    <h1 class="title">Mein Geselle <span class="bullet">·</span> Workshop Console</h1>
+    <p class="subtitle">Hermes Agent · Skill Evolution &amp; Activity</p>
+  </div>
+  <div class="masthead-right">
+    <div class="gateway-pill {% if gateway.running %}is-up{% else %}is-down{% endif %}">
+      <span class="dot"></span>
+      <span>{{ gateway.label }}</span>
+    </div>
+    <div class="clock">{{ now }}</div>
+  </div>
+</header>
+
+<main class="grid">
+
+  {# ----------------- LEFT: Skills ----------------- #}
+  <section class="col col-skills">
+    <h2 class="col-title">📚 Skills</h2>
+
+    {% for sk in skills %}
+    <article class="skill-card">
+      <header class="skill-head">
+        <div class="skill-head-left">
+          <h3 class="skill-name">{{ sk.name }}</h3>
+          {% if sk.is_evolving %}
+          <span class="evolving"><span class="amber-dot"></span> Currently Evolving</span>
+          {% endif %}
+        </div>
+        <div class="skill-chip">v{{ sk.version }} · last edit {{ sk.last_edit_human }}</div>
+      </header>
+      <p class="skill-desc">{{ sk.description }}</p>
+
+      <div class="timeline">
+        {% if sk.commits %}
+          {% for c in sk.commits %}
+          <details class="commit">
+            <summary
+              class="commit-dot"
+              title="{{ c.sha }} · {{ c.subject }} · {{ c.rel_age }}"
+              hx-get="/skill/{{ sk.slug }}/diff/{{ c.sha }}"
+              hx-trigger="toggle once"
+              hx-target="next .commit-diff"
+              hx-swap="innerHTML"></summary>
+            <div class="commit-meta">
+              <code>{{ c.sha }}</code> · {{ c.subject }} <span class="muted">· {{ c.rel_age }}</span>
+            </div>
+            <div class="commit-diff"><em class="muted">Loading diff…</em></div>
+          </details>
+          {% endfor %}
+        {% else %}
+          <span class="muted small">no commits tracked yet</span>
+        {% endif %}
+      </div>
+      <div class="skill-foot">
+        <span class="muted small">{{ sk.body_lines }} lines · <code>{{ sk.slug }}</code></span>
+      </div>
+    </article>
+    {% else %}
+    <p class="muted">No skills found under skills/handwerk/.</p>
+    {% endfor %}
+  </section>
+
+  {# ----------------- MIDDLE: Workshop floor ----------------- #}
+  <section class="col col-floor"
+    id="activity-region"
+    hx-get="/activity"
+    hx-trigger="every 3s"
+    hx-swap="innerHTML">
+    {% include "_activity.html" %}
+  </section>
+
+  {# ----------------- RIGHT: Skill growth ----------------- #}
+  <section class="col col-growth">
+    <h2 class="col-title">📈 Skill Growth</h2>
+
+    <div class="chart-card">
+      <svg viewBox="0 0 {{ growth.width }} {{ growth.height }}"
+           width="100%" preserveAspectRatio="xMidYMid meet"
+           class="growth-svg" role="img" aria-label="Total skill lines over commit history">
+        {# Grid lines #}
+        <g class="grid">
+          <line x1="32" y1="18"  x2="348" y2="18"/>
+          <line x1="32" y1="80"  x2="348" y2="80"/>
+          <line x1="32" y1="140" x2="348" y2="140"/>
+          <line x1="32" y1="212" x2="348" y2="212"/>
+        </g>
+        {# Y-axis labels (min / max) #}
+        {% if growth.vmin is defined %}
+        <text x="6" y="22" class="ax">{{ growth.vmax }}</text>
+        <text x="6" y="214" class="ax">{{ growth.vmin }}</text>
+        {% endif %}
+        {# Path #}
+        {% if growth.path_d %}
+        <path d="{{ growth.path_d }}" class="growth-line" fill="none"/>
+        {# Points #}
+        {% for p in growth.points %}
+        <circle cx="{{ '%.1f' % p[0] }}" cy="{{ '%.1f' % p[1] }}" r="3" class="growth-point"/>
+        {% endfor %}
+        {% else %}
+        <text x="180" y="120" text-anchor="middle" class="ax">no history yet</text>
+        {% endif %}
+        <text x="180" y="232" text-anchor="middle" class="ax">commits over time →</text>
+      </svg>
+
+      <dl class="growth-summary">
+        <div><dt>Day 1 baseline</dt><dd>{{ growth.baseline }} lines</dd></div>
+        <div>
+          <dt>Today</dt>
+          <dd>
+            {{ growth.today }} lines
+            {% if growth.pct >= 0 %}
+            <span class="delta up">+{{ growth.pct }}%</span>
+            {% else %}
+            <span class="delta down">{{ growth.pct }}%</span>
+            {% endif %}
+          </dd>
+        </div>
+      </dl>
+
+      <a href="#diffs" class="ghost-btn">View all diffs ↓</a>
+    </div>
+
+    <div id="diffs" class="diff-anchor">
+      <h3 class="col-title small">All recent commits</h3>
+      <ul class="commit-list">
+        {% for sk in skills %}
+          {% for c in sk.commits %}
+          <li>
+            <code>{{ c.sha }}</code>
+            <span class="muted">{{ c.rel_age }}</span>
+            <span class="skill-tag">{{ sk.slug }}</span>
+            <div class="muted small">{{ c.subject }}</div>
+          </li>
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <span class="muted small">activity source: <code>{{ activity_source }}</code> · gateway pid: <code>{{ gateway.pid or '—' }}</code> · reads: <code>~/.hermes</code></span>
+</footer>
+
+</body>
+</html>

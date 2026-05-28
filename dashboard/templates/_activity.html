@@ -1,0 +1,37 @@
+<h2 class="col-title">🛠️ Workshop Floor <span class="muted small">· {{ now }}</span></h2>
+
+<div class="tiles">
+  <div class="tile">
+    <div class="tile-num">{{ counts.customers }}</div>
+    <div class="tile-label">Customers</div>
+  </div>
+  <div class="tile">
+    <div class="tile-num">{{ counts.appointments }}</div>
+    <div class="tile-label">Appointments</div>
+  </div>
+  <div class="tile">
+    <div class="tile-num">{{ counts.angebote }}</div>
+    <div class="tile-label">Angebote</div>
+  </div>
+  <div class="tile accent">
+    <div class="tile-num">{{ tool_total }}</div>
+    <div class="tile-label">Tool-Calls Today</div>
+  </div>
+</div>
+
+<h3 class="col-title small feed-head">Live feed
+  <span class="muted small">· source: {{ activity_source }}</span>
+</h3>
+
+<ol class="feed">
+  {% for e in activity %}
+  <li class="feed-row role-{{ e.role }}">
+    <span class="feed-when">{{ e.when }}</span>
+    <span class="feed-platform plat-{{ e.platform }}">{{ e.platform }}</span>
+    <span class="feed-role">{{ e.role }}</span>
+    <span class="feed-text">{{ e.text }}</span>
+  </li>
+  {% else %}
+  <li class="feed-row"><span class="muted">No activity yet.</span></li>
+  {% endfor %}
+</ol>

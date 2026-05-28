@@ -1,0 +1,17 @@
+{% if diff_lines %}
+<pre class="diff">{% for line in diff_lines -%}
+{%- if line.startswith('+++') or line.startswith('---') -%}
+<span class="d-meta">{{ line }}</span>
+{% elif line.startswith('@@') -%}
+<span class="d-hunk">{{ line }}</span>
+{% elif line.startswith('+') -%}
+<span class="d-add">{{ line }}</span>
+{% elif line.startswith('-') -%}
+<span class="d-del">{{ line }}</span>
+{% else -%}
+<span class="d-ctx">{{ line }}</span>
+{% endif -%}
+{% endfor %}</pre>
+{% else %}
+<em class="muted">No diff vs HEAD — this commit is HEAD.</em>
+{% endif %}
