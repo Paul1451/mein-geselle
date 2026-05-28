@@ -1,1 +1,13 @@
-/tmp/run_demo.sh: line 14: timeout: command not found
+Warning: Unknown toolsets: mein_geselle
+
+session_id: 20260528_143003_4c9d04
+
+-----
+
+WeasyPrint could not import some external libraries. Please carefully follow the installation steps before reporting an issue:
+https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#installation
+https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#troubleshooting 
+
+-----
+
+Gespeichert. Bei Wasserschäden rufe ich ab sofort immer zuerst Frank Becker an, bevor ich irgendwas anderes mache. Steht jetzt in der Notfall-Routing-Skill.

@@ -59,28 +59,32 @@ Each follows Hermes' `registry.register()` pattern under the `mein_geselle` tool
 Prereqs: macOS or Linux, Python 3.13, `uv`, a Telegram bot from [@BotFather](https://t.me/BotFather), an [OpenRouter](https://openrouter.ai) (or Anthropic/Nous Portal) API key.
 
 ```bash
-# 1. Install Hermes Agent
+# 1. Install Hermes Agent and clone Mein Geselle next to it
 curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
-
-# 2. Clone Mein Geselle next to it
 git clone https://github.com/Paul1451/mein-geselle.git
 
-# 3. Link tools + skills into Hermes
-for f in mein-geselle/tools/tool_*.py; do
-  ln -sfn "$(pwd)/$f" "hermes-agent/tools/mg_$(basename $f)"
-done
-ln -sfn "$(pwd)/mein-geselle/skills/handwerk" hermes-agent/skills/handwerk
+# 2. One-shot install: symlinks tools, links skills, patches config, seeds DB
+./mein-geselle/scripts/install_into_hermes.sh ./hermes-agent
 
-# 4. Configure
-hermes setup           # model + provider
-hermes setup gateway   # Telegram
+# 3. Add your credentials to ~/.hermes/.env
+#    OPENROUTER_API_KEY=...
+#    TELEGRAM_BOT_TOKEN=...   (from @BotFather)
+#    TELEGRAM_ALLOWED_USERS=123456789
 
-# 5. Seed demo data + run
-python mein-geselle/tools/seed.py
-hermes gateway run
+# 4. Start everything
+hermes gateway run                                      # the agent gateway
+python mein-geselle/dashboard/app.py                    # the Workshop Console on :7070
 ```
 
-Send a voice memo or text to your bot and watch the agent plan.
+Send a voice memo or text to your bot. Open `http://localhost:7070` to watch the skill timeline evolve as you chat.
+
+## Demo (screenshots)
+
+| | |
+|---|---|
+| ![Dashboard during the demo run](submission/screenshots/dashboard_during_demo.png) | Workshop Console mid-demo: skill cards with version chips, live activity feed pulling from the FTS5 session store, hand-rolled SVG growth chart of skill LOC across commits. |
+
+(More screenshots and a 2:30 video walkthrough land in `submission/` before the May 31 deadline.)
 
 ## Demo
 

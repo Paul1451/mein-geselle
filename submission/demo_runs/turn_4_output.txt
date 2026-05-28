@@ -1,1 +1,31 @@
-/tmp/run_demo.sh: line 14: timeout: command not found
+Warning: Unknown toolsets: mein_geselle
+
+session_id: 20260528_142910_76c940
+
+-----
+
+WeasyPrint could not import some external libraries. Please carefully follow the installation steps before reporting an issue:
+https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#installation
+https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#troubleshooting 
+
+-----
+
+🚨 NOTFALL EINGESTUFT — Dringlichkeit 5/5 — Wasserschaden
+
+Termin gebucht:
+  📅 Heute, 28. Mai 2026, 08:00–09:30 Uhr
+  🏠 Familie Yıldırım, Sonnenallee 211, 12059 Berlin
+  📞 +49 30 6217 9043
+  🆔 UID: 275b6227-0935-4c71-9ea0-18f8f9d24baf@mein-geselle
+
+Wichtige Hinweise aus der Kundenakte:
+  - Kinder im Haus → Geräusche reduzieren
+  - Sprachpräferenz: Deutsch, gerne auch Türkisch
+
+Checkliste für den Einsatz:
+  - Wasser-Hauptabsperrung? (vor Ort prüfen)
+  - Feuchtigkeitsmessgerät, Wassersauger, Trocknungsgeräte mitnehmen
+  - Versicherungsschaden → Fotos dokumentieren!
+  - Eilt: Küche ist betroffen, Folgeschäden minimieren
+
+Soll ich Familie Yıldırım direkt anrufen oder per SMS Bescheid geben, dass wir kommen?
