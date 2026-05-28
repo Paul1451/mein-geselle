@@ -1,0 +1,19 @@
+# Mein Geselle — runtime dependencies layered on top of an existing Hermes Agent install.
+# Install into the Hermes venv:
+#   source /path/to/hermes-agent/.venv/bin/activate
+#   uv pip install -r mein-geselle/requirements.txt
+
+# --- Dashboard (FastAPI + HTMX server-side rendering)
+fastapi>=0.110
+uvicorn[standard]>=0.27
+jinja2>=3.1
+pyyaml>=6.0          # also used by tool_remember_rule + dashboard frontmatter parsing
+
+# --- Angebot-PDF rendering
+weasyprint>=64,<70   # macOS users: also `brew install pango cairo` and use arm64 Python
+# (Hermes itself ships Jinja2; pinned again above so seed/dashboard work without Hermes)
+
+# Notes:
+#  - SQLite (used by tool_customer_db) ships with the Python stdlib — no entry here.
+#  - icalendar handling in tool_calendar is hand-rolled stdlib (datetime + zoneinfo).
+#  - Hermes Agent itself is NOT listed here: it's the host; install it separately.

@@ -15,12 +15,10 @@ Single-page dashboard that visually proves Hermes is learning over time.
 ## Install & run
 
 ```bash
-cd /Users/paul/Desktop/hermes-challenge/hermes-agent
-source .venv/bin/activate
-uv pip install fastapi uvicorn jinja2 pyyaml
-
-cd ../mein-geselle/dashboard
-python app.py
+# From the parent dir that contains both hermes-agent/ and mein-geselle/:
+source hermes-agent/.venv/bin/activate
+uv pip install -r mein-geselle/requirements.txt
+python mein-geselle/dashboard/app.py
 ```
 
 Open <http://localhost:7070/>.

@@ -50,7 +50,44 @@ from tools.registry import registry  # type: ignore
 # ---------------------------------------------------------------------------
 
 # Real on-disk repo (the ~/.hermes/skills/handwerk path is a symlink to this).
-REPO_ROOT = Path("/Users/paul/Desktop/hermes-challenge/mein-geselle")
+# Resolution order:
+#   1. $MEIN_GESELLE_ROOT (explicit override)
+#   2. ~/.hermes/skills/handwerk → realpath up to the repo root (symlink trail)
+#   3. tools/ directory parent (works when this file lives in the repo, even
+#      when Hermes imports it via the tools/mg_*.py symlink — Path resolution
+#      follows the link to the real source)
+
+
+def _resolve_repo_root() -> Path:
+    env = os.environ.get("MEIN_GESELLE_ROOT")
+    if env:
+        p = Path(env).expanduser().resolve()
+        if (p / "skills" / "handwerk").is_dir():
+            return p
+
+    handwerk_link = Path.home() / ".hermes" / "skills" / "handwerk"
+    if handwerk_link.exists():
+        # Real path of the linked dir = .../mein-geselle/skills/handwerk
+        real = handwerk_link.resolve()
+        # repo root is two parents up from skills/handwerk
+        candidate = real.parent.parent
+        if (candidate / "skills" / "handwerk").is_dir():
+            return candidate
+
+    # Fall back to the file's real location (follows the mg_tool_* symlink
+    # back to /<repo>/tools/tool_remember_rule.py — parents[1] is the repo).
+    here = Path(__file__).resolve()
+    candidate = here.parents[1]
+    if (candidate / "skills" / "handwerk").is_dir():
+        return candidate
+
+    raise RuntimeError(
+        "Could not locate mein-geselle repo root. Set MEIN_GESELLE_ROOT or "
+        "symlink ~/.hermes/skills/handwerk to the repo's skills/handwerk dir."
+    )
+
+
+REPO_ROOT = _resolve_repo_root()
 SKILLS_ROOT = REPO_ROOT / "skills" / "handwerk"
 
 # Category → (skill_dir_name, public_skill_name).

@@ -43,6 +43,7 @@ Hermes Gateway ──► STT (Whisper) ──► Hermes Agent Loop
 | `tool_calendar.py` | Free-slot search + booking against `~/.hermes/data/handwerk.ics` (RFC-5545) |
 | `tool_lead_classify.py` | Deterministic keyword classifier for inbound messages |
 | `tool_angebot_draft.py` | German Angebot drafter with line items, 19% VAT, discount rules, PDF export |
+| `tool_remember_rule.py` | Natural-language learning-loop primitive — wraps `skill_manage`, appends a dated bullet to the relevant skill's `## 📒 Learned Rules` section, bumps the semver, and creates a git commit |
 
 Each follows Hermes' `registry.register()` pattern under the `mein_geselle` toolset.
 
@@ -63,7 +64,10 @@ Prereqs: macOS or Linux, Python 3.13, `uv`, a Telegram bot from [@BotFather](htt
 curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
 git clone https://github.com/Paul1451/mein-geselle.git
 
-# 2. One-shot install: symlinks tools, links skills, patches config, seeds DB
+# 2. Add the runtime deps
+uv pip install -r mein-geselle/requirements.txt
+
+# 3. One-shot install: symlinks tools, links skills, patches config, seeds DB
 ./mein-geselle/scripts/install_into_hermes.sh ./hermes-agent
 
 # 3. Add your credentials to ~/.hermes/.env
