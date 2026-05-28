@@ -1,7 +1,7 @@
 ---
 name: notfall-routing
 description: "Emergency triage SOP for Handwerker incidents."
-version: 0.1.0
+version: 0.1.1
 author: paul
 license: MIT
 platforms: [linux, macos, windows]
@@ -102,3 +102,7 @@ minutes of the inbound message timestamp.**
 - This is v0.1.0 — keyword list and channels are expected to grow with
   real-world incidents. New keywords should be added with a short
   justification in the version bump's commit message.
+
+## 📒 Learned Rules
+
+- 2026-05-28T14:14 [global] (emergency): Notfälle (Wasserschaden, Strom aus) sofort an Maler Schulz mobil eskalieren.  _(src: Bei akutem Wasserschaden direkt anrufen, nicht warten.)_
