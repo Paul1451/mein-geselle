@@ -1,0 +1,41 @@
+flowchart TB
+    user["📱 Tradesperson<br/>(Telegram voice/text)"]
+    gw["Hermes Gateway<br/>(STT · Whisper)"]
+    loop["⚙️ Hermes Agent Loop<br/>(planning + tool use)"]
+
+    user --> gw --> loop
+
+    subgraph custom["Custom Tools — toolset: mein_geselle"]
+        direction LR
+        t1["customer_db"]
+        t2["calendar"]
+        t3["lead_classify"]
+        t4["angebot_draft"]
+        t5["remember_rule"]
+    end
+
+    subgraph builtin["Hermes Built-ins (60+)"]
+        direction LR
+        b1["skill_manage"]
+        b2["session_search"]
+        b3["send_message"]
+    end
+
+    loop --> custom
+    loop --> builtin
+
+    t1 --> sqlite[(SQLite CRM<br/>customers · appointments · angebote)]
+    t2 --> ical[(iCal RFC-5545<br/>handwerk.ics)]
+    t3 --> route["urgency 1-5<br/>+ category"]
+    t4 --> pdf["German Angebot<br/>+ 19% MwSt PDF"]
+    t5 --> skills{{"skills/handwerk/*<br/>(versioned · git-committed)"}}
+
+    b1 --> skills
+    b2 --> fts[("Hermes FTS5 store<br/>cross-session memory")]
+
+    classDef tool fill:#fbf7ee,stroke:#c47a1d,color:#222
+    classDef store fill:#eaf3ff,stroke:#3a6,color:#222
+    classDef agent fill:#fef3d4,stroke:#c47a1d,color:#222,stroke-width:2px
+    class loop agent
+    class t1,t2,t3,t4,t5,b1,b2,b3 tool
+    class sqlite,ical,pdf,skills,fts,route store

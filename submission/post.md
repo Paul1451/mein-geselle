@@ -10,23 +10,7 @@ It's Tuesday, 10:42. Painter Schulz is on a 4-metre ladder in a Berlin Altbau, r
 
 **Mein Geselle** ("My Apprentice") is a Hermes-Agent-powered Telegram bot that runs a tradesperson's customer back-office from a voice memo. Multi-tool, voice-first, and — the part judges should care about — its skills evolve from real conversations. Schulz talks; the bot remembers, drafts, schedules, and gets better.
 
-```
-Telegram voice/text ──► Hermes Gateway (STT)
-       │
-       ▼
-┌─────────────────────────────────────────┐
-│   Hermes Agent Loop (planning + tools)  │
-└─────────────────────────────────────────┘
-  │       │        │        │       │       │
-  ▼       ▼        ▼        ▼       ▼       ▼
-customer  calendar lead_   angebot  remember skill_
-  _db              classify _draft   _rule   manage
-  │       │        │        │       │       │
-  ▼       ▼        ▼        ▼       ▼       ▼
- SQLite  iCal     route    PDF +   appends  versions
- (CRM)   (RFC5545) inbox    DB      Learned  & evolves
-                                    Rules
-```
+![Architecture](submission/diagrams/architecture.png)
 
 ## Tech Stack
 
@@ -42,7 +26,16 @@ customer  calendar lead_   angebot  remember skill_
 
 **Multi-step planning.** A 10-second voice memo — "Bitte draft mir ein Angebot für Frau Müller, das Bad das wir letzte Woche besprochen haben" — becomes a three-tool plan: `customer_db` lookup, `angebot_draft` (8 qm walls, 4500 EUR net), then the response. One user message, three tool turns, 17.5 s wall clock, no hand-holding.
 
-**Tool ecosystem.** Five custom tools sit alongside Hermes' 60+ built-ins, registered via `registry.register()` in `tools/` under the toolset `mein_geselle`: `customer_db`, `calendar`, `lead_classify`, `angebot_draft`, and `remember_rule`. Average tool latency is 0.14 s.
+**Tool ecosystem.** Five custom tools sit alongside Hermes' 60+ built-ins, registered via `registry.register()` in `tools/` under the toolset `mein_geselle`. Real latency measured across 26 production calls today:
+
+| Tool | Calls | Median | Max |
+|---|---:|---:|---:|
+| `customer_db` | 11 | 10 ms | 10 ms |
+| `calendar` | 5 | 10 ms | 20 ms |
+| `lead_classify` | 1 | 10 ms | 10 ms |
+| `remember_rule` | 4 | 145 ms | 170 ms |
+
+`remember_rule` runs hotter because it touches git. Everything else is SQLite-fast.
 
 **Multi-tool chain.** Schulz types `"Notfall! Familie Yıldırım hat Wasserschaden in der Küche."`. Hermes runs `lead_classify` (urgency 5/5), `customer_db` (Yıldırım, notes: *Kinder im Haus · Türkisch wäre nett* — recalled from a prior session), `calendar` (books an emergency 08:00–09:30 slot, UID `275b6227-…`), then replies with an ops checklist and asks whether to call or SMS.
 
