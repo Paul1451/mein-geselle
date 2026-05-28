@@ -1,0 +1,23 @@
+Warning: Unknown toolsets: mein_geselle
+
+session_id: 20260528_142641_963775
+
+-----
+
+WeasyPrint could not import some external libraries. Please carefully follow the installation steps before reporting an issue:
+https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#installation
+https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#troubleshooting 
+
+-----
+
+Ja, Frau Müller ist im System. Hier ihre Daten:
+
+  Name:    Frau Müller
+  Telefon: +49 30 4416 2271
+  E-Mail:  a.mueller@example.de
+  Adresse: Schönhauser Allee 142, 10437 Berlin
+
+  Notizen: Stammkundin seit 2019. Bevorzugt Termine vormittags.
+           Zahlung: 5% Skonto bei Sofort-Zahlung.
+
+Ob sie schon mal angerufen hat, sehe ich anhand der reinen Kundendaten nicht — soll ich ihre letzten Termine checken?
