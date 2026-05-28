@@ -1,0 +1,76 @@
+---
+# Mein Geselle - Docker Compose orchestration
+# One Hermes gateway + one dashboard, sharing a named volume for state persistence.
+#
+# Quick start:
+#   cp .env.example .env
+#   # Fill in OPENROUTER_API_KEY and TELEGRAM_BOT_TOKEN
+#   docker compose -f docker/docker-compose.yml up
+#
+# Bot online, dashboard at http://localhost:7070
+
+services:
+  # =========================================================================
+  # hermes-gateway: Mein Geselle agent + Hermes Agent loop
+  # Handles Telegram inbound, runs tools, updates state.db
+  # =========================================================================
+  hermes-gateway:
+    build:
+      context: ..  # Build from mein-geselle repo root
+      dockerfile: docker/Dockerfile
+      target: gateway
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      args:
+        BUILDKIT_INLINE_CACHE: 1
+    container_name: mein-geselle-gateway
+    environment:
+      # Hermes reads .env for API keys and Telegram token
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_ALLOWED_USERS=${TELEGRAM_ALLOWED_USERS:-}
+      # Hermes home inside container
+      - HOME=/root
+    volumes:
+      # Named volume: persists ~/.hermes (config, state.db, skills, logs, data/)
+      # across restarts so Hermes doesn't lose learning
+      - hermes-data:/root/.hermes
+    # No ports exposed — Telegram uses outbound polling (no webhook)
+    restart: unless-stopped
+
+  # =========================================================================
+  # dashboard: Mein Geselle Workshop Console (FastAPI + Uvicorn on :7070)
+  # Read-only access to shared Hermes state (skills, state.db, logs)
+  # =========================================================================
+  dashboard:
+    build:
+      context: ..  # Build from mein-geselle repo root
+      dockerfile: docker/Dockerfile
+      target: dashboard
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      args:
+        BUILDKIT_INLINE_CACHE: 1
+    container_name: mein-geselle-dashboard
+    ports:
+      # Dashboard listens on 127.0.0.1:7070 inside container, exposed to host
+      - "127.0.0.1:7070:7070"
+    volumes:
+      # Mount shared Hermes data volume (read-only)
+      # Dashboard reads: ~/.hermes/state.db, skills/, logs/, data/
+      - hermes-data:/root/.hermes:ro
+    depends_on:
+      # Ensure gateway is started before dashboard (state.db seed time)
+      hermes-gateway:
+        condition: service_healthy
+    restart: unless-stopped
+
+# ============================================================================
+# Shared volume for Hermes runtime state
+# Persists across container restarts so learning is never lost
+# ============================================================================
+volumes:
+  hermes-data:
+    driver: local

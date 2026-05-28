@@ -82,6 +82,19 @@ python mein-geselle/dashboard/app.py                    # the Workshop Console o
 
 Send a voice memo or text to your bot. Open `http://localhost:7070` to watch the skill timeline evolve as you chat.
 
+## Run with Docker
+
+Fastest way to get the bot and dashboard running (no Python install or Hermes setup needed):
+
+```bash
+cp .env.example .env       # Fill in OPENROUTER_API_KEY + TELEGRAM_BOT_TOKEN
+docker compose -f docker/docker-compose.yml up
+# → Bot online, dashboard at http://localhost:7070
+```
+
+The setup clones Hermes Agent inside the container and installs everything. State persists across restarts via a named volume.
+Supports both `linux/amd64` and `linux/arm64` (native on Apple Silicon macOS).
+
 ## Demo (screenshots)
 
 | | |
