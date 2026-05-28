@@ -32,6 +32,23 @@ from typing import Any, Dict, List
 # Make sibling import work both when run as a script and as a module.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+# tool_customer_db now performs a top-level `from tools.registry import registry`
+# (the wrapping try/except was removed so hermes-agent's AST-based discovery
+# can detect the registry.register() call). Add the hermes-agent root to
+# sys.path so that import succeeds when this script runs standalone.
+_HERMES_ROOT = Path(__file__).resolve().parent.parent.parent / "hermes-agent"
+if _HERMES_ROOT.exists():
+    if str(_HERMES_ROOT) not in sys.path:
+        sys.path.insert(0, str(_HERMES_ROOT))
+else:
+    print(
+        f"ERROR: hermes-agent root not found at {_HERMES_ROOT}. "
+        "tool_customer_db now requires `tools.registry` on sys.path. "
+        "Cannot continue.",
+        file=sys.stderr,
+    )
+    raise SystemExit(2)
+
 from tool_customer_db import (  # noqa: E402  (sys.path tweak above)
     DB_PATH,
     SCHEMA_SQL,

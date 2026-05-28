@@ -51,6 +51,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from tools.registry import registry  # type: ignore
+
 
 # ---------------------------------------------------------------------------
 # Paths & constants
@@ -966,27 +968,23 @@ ANGEBOT_DRAFT_SCHEMA: Dict[str, Any] = {
 # ---------------------------------------------------------------------------
 # Hermes registry hook
 # ---------------------------------------------------------------------------
+# Top-level call so the hermes-agent registry AST scanner discovers this
+# module (it only picks up bare `registry.register(...)` calls — not ones
+# wrapped in try/except).
 
-try:  # pragma: no cover — depends on host process
-    from tools.registry import registry  # type: ignore
-
-    registry.register(
-        name="angebot_draft",
-        toolset="mein_geselle",
-        schema=ANGEBOT_DRAFT_SCHEMA,
-        handler=angebot_draft_tool,
-        check_fn=check_angebot_draft_requirements,
-        emoji="\U0001f4dd",  # 📝
-        max_result_size_chars=20_000,
-        description=(
-            "Draft a German Handwerker Angebot (PDF + markdown) for a "
-            "customer; persists into the customer_db angebote table."
-        ),
-    )
-except ImportError:
-    # Hermes registry isn't on the path (standalone import). Module still
-    # works as a plain library — see __main__ smoke test below.
-    pass
+registry.register(
+    name="angebot_draft",
+    toolset="mein_geselle",
+    schema=ANGEBOT_DRAFT_SCHEMA,
+    handler=angebot_draft_tool,
+    check_fn=check_angebot_draft_requirements,
+    emoji="\U0001f4dd",  # 📝
+    max_result_size_chars=20_000,
+    description=(
+        "Draft a German Handwerker Angebot (PDF + markdown) for a "
+        "customer; persists into the customer_db angebote table."
+    ),
+)
 
 
 __all__ = [

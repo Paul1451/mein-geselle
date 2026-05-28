@@ -48,6 +48,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from zoneinfo import ZoneInfo
 
+from tools.registry import registry  # type: ignore
+
 
 # ---------------------------------------------------------------------------
 # Paths & constants
@@ -581,24 +583,20 @@ CALENDAR_SCHEMA: Dict[str, Any] = {
 # ---------------------------------------------------------------------------
 # Hermes registry hook
 # ---------------------------------------------------------------------------
+# Top-level call so the hermes-agent registry AST scanner discovers this
+# module (it only picks up bare `registry.register(...)` calls — not ones
+# wrapped in try/except).
 
 
-try:  # pragma: no cover — depends on host process
-    from tools.registry import registry  # type: ignore
-
-    registry.register(
-        name="calendar",
-        toolset="mein_geselle",
-        schema=CALENDAR_SCHEMA,
-        handler=calendar_tool,
-        check_fn=check_calendar_requirements,
-        emoji="📅",
-        max_result_size_chars=20_000,
-    )
-except ImportError:
-    # Hermes registry isn't on the path (standalone import); module still
-    # works as a plain library — see __main__ smoke test below.
-    pass
+registry.register(
+    name="calendar",
+    toolset="mein_geselle",
+    schema=CALENDAR_SCHEMA,
+    handler=calendar_tool,
+    check_fn=check_calendar_requirements,
+    emoji="📅",
+    max_result_size_chars=20_000,
+)
 
 
 __all__ = [

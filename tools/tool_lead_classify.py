@@ -51,6 +51,8 @@ import re
 import unicodedata
 from typing import Any, Dict, List, Tuple
 
+from tools.registry import registry  # type: ignore
+
 
 # ---------------------------------------------------------------------------
 # Keyword sets (case- and umlaut-insensitive — normalised via _norm())
@@ -335,24 +337,20 @@ LEAD_CLASSIFY_SCHEMA: Dict[str, Any] = {
 # ---------------------------------------------------------------------------
 # Hermes registry hook
 # ---------------------------------------------------------------------------
+# Top-level call so the hermes-agent registry AST scanner discovers this
+# module (it only picks up bare `registry.register(...)` calls — not ones
+# wrapped in try/except).
 
 
-try:  # pragma: no cover — depends on host process
-    from tools.registry import registry  # type: ignore
-
-    registry.register(
-        name="lead_classify",
-        toolset="mein_geselle",
-        schema=LEAD_CLASSIFY_SCHEMA,
-        handler=lead_classify_tool,
-        check_fn=check_lead_classify_requirements,
-        emoji="🏷️",
-        max_result_size_chars=4_000,
-    )
-except ImportError:
-    # Hermes registry isn't on the path (standalone import). Module still
-    # works as a plain library — see __main__ smoke test below.
-    pass
+registry.register(
+    name="lead_classify",
+    toolset="mein_geselle",
+    schema=LEAD_CLASSIFY_SCHEMA,
+    handler=lead_classify_tool,
+    check_fn=check_lead_classify_requirements,
+    emoji="🏷️",
+    max_result_size_chars=4_000,
+)
 
 
 __all__ = [

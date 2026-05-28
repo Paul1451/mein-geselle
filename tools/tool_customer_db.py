@@ -33,6 +33,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from tools.registry import registry  # type: ignore
+
 
 # ---------------------------------------------------------------------------
 # Paths & schema
@@ -482,30 +484,22 @@ CUSTOMER_DB_SCHEMA = {
 # Hermes registry hook
 # ---------------------------------------------------------------------------
 # Importing the registry at module load mirrors how tools/todo_tool.py does
-# it. The tool only registers when the module is imported into a process
-# that has the `tools.registry` module on sys.path (i.e. a running
-# hermes-agent). When imported standalone (e.g. by seed.py), the registry
-# import is wrapped so the module stays usable.
+# it. Top-level call so the hermes-agent registry AST scanner discovers this
+# module (it only picks up bare `registry.register(...)` calls — not ones
+# wrapped in try/except).
 
-try:  # pragma: no cover — depends on host process
-    from tools.registry import registry  # type: ignore
-
-    registry.register(
-        name="customer_db",
-        toolset="mein_geselle",
-        schema=CUSTOMER_DB_SCHEMA,
-        handler=customer_db_tool,
-        check_fn=check_customer_db_requirements,
-        emoji="🧰",
-        description=(
-            "CRUD over the Mein Geselle customer SQLite DB "
-            "(customers, appointments, Angebote)."
-        ),
-    )
-except ImportError:
-    # Hermes registry isn't on the path (e.g. running seed.py standalone).
-    # The module is still importable and usable as a plain library.
-    pass
+registry.register(
+    name="customer_db",
+    toolset="mein_geselle",
+    schema=CUSTOMER_DB_SCHEMA,
+    handler=customer_db_tool,
+    check_fn=check_customer_db_requirements,
+    emoji="🧰",
+    description=(
+        "CRUD over the Mein Geselle customer SQLite DB "
+        "(customers, appointments, Angebote)."
+    ),
+)
 
 
 __all__ = [
